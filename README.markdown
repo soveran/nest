@@ -47,7 +47,7 @@ And you can use any object as a key, not only strings:
     => "foo:42"
 
 In a more realistic tone, lets assume you are working with Redis and
-dealing with users:
+dealing with events:
 
     >> event = Nest.new("event")
     => "event"
