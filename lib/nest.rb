@@ -1,5 +1,3 @@
-#! /usr/bin/env ruby
-
 class Nest < String
   VERSION = "0.0.2"
 
