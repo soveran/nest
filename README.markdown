@@ -43,8 +43,8 @@ To create a new namespace:
 
 And you can use any object as a key, not only strings:
 
-    >> ns[:foo][42]
-    => "foo:42"
+    >> ns[:bar][42]
+    => "foo:bar:42"
 
 In a more realistic tone, lets assume you are working with Redis and
 dealing with events:
