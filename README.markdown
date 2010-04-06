@@ -17,8 +17,7 @@ data.
     => "Redis Meetup"
 
 It is a design pattern in key-value databases to use the key to simulate
-structure, and you can read more about this in the [Twitter case
-study](http://code.google.com/p/redis/wiki/TwitterAlikeExample).
+structure, and you can read more about this in the [case study for a Twitter clone](http://code.google.com/p/redis/wiki/TwitterAlikeExample).
 
 Nest helps you generate those keys by providing chainable namespaces:
 
