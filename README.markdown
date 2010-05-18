@@ -7,7 +7,8 @@ Description
 -----------
 
 If you are familiar with databases like
-[Redis](http://code.google.com/p/redis) and libraries like [Ohm](http://ohm.keyvalue.org) or
+[Redis](http://code.google.com/p/redis) and
+libraries like [Ohm](http://ohm.keyvalue.org) or
 [redis-namespace](http://github.com/defunkt/redis-namespace), you
 already know how important it is to craft the keys that will hold the
 data.
@@ -17,7 +18,8 @@ data.
     => "Redis Meetup"
 
 It is a design pattern in key-value databases to use the key to simulate
-structure, and you can read more about this in the [case study for a Twitter clone](http://code.google.com/p/redis/wiki/TwitterAlikeExample).
+structure, and you can read more about this in the [case study for a
+Twitter clone](http://code.google.com/p/redis/wiki/TwitterAlikeExample).
 
 Nest helps you generate those keys by providing chainable namespaces:
 
@@ -48,8 +50,8 @@ And you can use any object as a key, not only strings:
 In a more realistic tone, lets assume you are working with Redis and
 dealing with events:
 
-    >> event = Nest.new("event")
-    => "event"
+    >> events = Nest.new("events")
+    => "events"
 
     >> redis = Redis.new
     => #<Redis::Client...>
@@ -57,20 +59,47 @@ dealing with events:
     >> id = redis.incr(event)
     => 1
 
-    >> redis.set event[id][:name], "Redis Meetup"
+    >> redis.set events[id][:name], "Redis Meetup"
     => "OK"
 
-    >> redis.get event[id][:name]
+    >> redis.get events[id][:name]
     => "Redis Meetup"
 
-    >> meetup = event[id]
-    => "event:1"
+    >> meetup = events[id]
+    => "events:1"
 
     >> redis.get meetup[:name]
     => "Redis Meetup"
 
+Using Nest as an object oriented Redis key
+------------------------------------------
+
+If you supply a Redis client as a second parameter, you can operate with
+Redis directly:
+
+    >> redis = Redis.new
+    => #<Redis::Client...>
+
+    >> events = Nest.new("events", redis)
+    => "events"
+
+    >> events.sadd(meetup)
+    => true
+
+    >> events.sismember(meetup)
+    => true
+
+    >> events.smembers
+    => ["events:1"]
+
+    >> events.del
+    >> true
+
+It allows you to execute all the Redis commands that expect a key as the
+first parameter. Think of it as a curried Redis client.
+
 Differences with redis-namespace
--------------------------------
+--------------------------------
 
 [redis-namespace](http://github.com/defunkt/redis-namespace) wraps Redis
 and translates the keys back and forth transparently.
@@ -81,7 +110,7 @@ different scope.
 Use Nest when you want to use the keys to represent structure.
 
 Differences with Ohm
--------------------
+--------------------
 
 [Ohm](http://ohm.keyvalue.org) lets you map Ruby objects to Redis with
 little effort. It not only alleviates you from the pain of generating
