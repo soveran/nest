@@ -52,12 +52,17 @@ class TestNest < Test::Unit::TestCase
 
     should "work if a redis instance is supplied" do
       n1 = Nest.new("foo", @redis)
-      n1.set("s")
-      n1.append("1")
+      n1.set("s1")
 
       assert_equal "s1", n1.get
-      assert_equal "string", n1.type
-      assert_equal true, n1.exists
+    end
+
+    should "pass the redis instance to new keys" do
+      n1 = Nest.new("foo", @redis)
+      n1["bar"].set("s2")
+
+      assert_equal nil, n1.get
+      assert_equal "s2", n1["bar"].get
     end
   end
 end

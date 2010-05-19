@@ -1,5 +1,5 @@
 class Nest < String
-  VERSION = "0.0.3"
+  VERSION = "0.0.4"
 
   def initialize(key, redis = nil)
     super(key)
@@ -7,7 +7,7 @@ class Nest < String
   end
 
   def [](key)
-    self.class.new("#{self}:#{key}")
+    self.class.new("#{self}:#{key}", redis)
   end
 
   [:append, :blpop, :brpop, :decr, :decrby, :del, :exists, :expire,
