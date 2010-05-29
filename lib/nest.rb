@@ -13,7 +13,7 @@ class Nest < String
   :zunionstore]
 
   def initialize(key, redis = nil)
-    super(key)
+    super(key.to_s)
     @redis = redis
   end
 
