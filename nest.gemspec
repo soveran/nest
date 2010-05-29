@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name              = "nest"
-  s.version           = "0.0.4"
+  s.version           = "0.0.5"
   s.summary           = "Generate nested namespaced keys for key-value databases."
   s.description       = "It is a design pattern in key-value databases to use the key to simulate structure, and Nest can take care of that."
   s.authors           = ["Michel Martens"]

@@ -1,5 +1,5 @@
 class Nest < String
-  VERSION = "0.0.4"
+  VERSION = "0.0.5"
   METHODS = [:append, :blpop, :brpop, :decr, :decrby, :del, :exists,
   :expire, :expireat, :get, :getset, :hdel, :hexists, :hget, :hgetall,
   :hincrby, :hkeys, :hlen, :hmset, :hset, :hvals, :incr, :incrby,
