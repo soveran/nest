@@ -3,14 +3,14 @@ class Nest < String
   METHODS = [:append, :blpop, :brpop, :decr, :decrby, :del, :exists,
   :expire, :expireat, :get, :getset, :hdel, :hexists, :hget, :hgetall,
   :hincrby, :hkeys, :hlen, :hmset, :hset, :hvals, :incr, :incrby,
-  :lindex, :llen, :lpop, :lpush, :lrange, :lrem, :lset, :ltrim, :move,
-  :rename, :renamenx, :rpop, :rpoplpush, :rpush, :sadd, :scard, :sdiff,
-  :sdiffstore, :set, :setex, :setnx, :sinter, :sinterstore, :sismember,
-  :smembers, :smove, :sort, :spop, :srandmember, :srem, :substr,
-  :sunion, :sunionstore, :ttl, :type, :unwatch, :watch, :zadd, :zcard,
-  :zincrby, :zinterstore, :zrange, :zrangebyscore, :zrank, :zrem,
-  :zremrangebyrank, :zremrangebyscore, :zrevrange, :zrevrank, :zscore,
-  :zunionstore]
+  :lindex, :llen, :lpop, :lpush, :lrange, :lrem, :lset, :ltrim,
+  :mapped_hmset, :move, :rename, :renamenx, :rpop, :rpoplpush,
+  :rpush, :sadd, :scard, :sdiff, :sdiffstore, :set, :setex, :setnx,
+  :sinter, :sinterstore, :sismember, :smembers, :smove, :sort, :spop,
+  :srandmember, :srem, :substr, :sunion, :sunionstore, :ttl, :type,
+  :unwatch, :watch, :zadd, :zcard, :zincrby, :zinterstore, :zrange,
+  :zrangebyscore, :zrank, :zrem, :zremrangebyrank, :zremrangebyscore,
+  :zrevrange, :zrevrank, :zscore, :zunionstore]
 
   def initialize(key, redis = nil)
     super(key.to_s)
