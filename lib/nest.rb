@@ -1,10 +1,10 @@
 class Nest < String
-  VERSION = "0.0.5"
+  VERSION = "0.0.6"
   METHODS = [:append, :blpop, :brpop, :decr, :decrby, :del, :exists,
   :expire, :expireat, :get, :getset, :hdel, :hexists, :hget, :hgetall,
-  :hincrby, :hkeys, :hlen, :hmset, :hset, :hvals, :incr, :incrby,
-  :lindex, :llen, :lpop, :lpush, :lrange, :lrem, :lset, :ltrim,
-  :mapped_hmset, :move, :rename, :renamenx, :rpop, :rpoplpush,
+  :hincrby, :hkeys, :hlen, :hmget, :hmset, :hset, :hvals, :incr,
+  :incrby, :lindex, :llen, :lpop, :lpush, :lrange, :lrem, :lset,
+  :ltrim, :mapped_hmset, :move, :rename, :renamenx, :rpop, :rpoplpush,
   :rpush, :sadd, :scard, :sdiff, :sdiffstore, :set, :setex, :setnx,
   :sinter, :sinterstore, :sismember, :smembers, :smove, :sort, :spop,
   :srandmember, :srem, :substr, :sunion, :sunionstore, :ttl, :type,
