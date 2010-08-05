@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), "test_helper")
+require File.expand_path("test_helper", File.dirname(__FILE__))
 
 class TestNest < Test::Unit::TestCase
   context "creating namespaces" do
@@ -63,6 +63,29 @@ class TestNest < Test::Unit::TestCase
 
       assert_equal nil, n1.get
       assert_equal "s2", n1["bar"].get
+    end
+
+    should "PubSub" do
+      foo = Nest.new("foo", @redis)
+      listening = false
+      message_received = false
+
+      Thread.new do
+        while !listening; end
+        Nest.new("foo", Redis.new(:db => 15)).publish("")
+      end
+
+      foo.subscribe do |on|
+        on.message do
+          message_received = true
+
+          foo.unsubscribe
+        end
+
+        listening = true
+      end
+
+      assert message_received
     end
   end
 end
