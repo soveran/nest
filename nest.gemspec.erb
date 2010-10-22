@@ -2,7 +2,7 @@
 Gem::Specification.new do |s|
   s.name              = "nest"
   s.version           = "<%= Nest::VERSION %>"
-  s.summary           = "Generate nested namespaced keys for key-value databases."
+  s.summary           = "Object Oriented Keys for Redis."
   s.description       = "It is a design pattern in key-value databases to use the key to simulate structure, and Nest can take care of that."
   s.authors           = ["Michel Martens"]
   s.email             = ["michel@soveran.com"]
@@ -15,4 +15,6 @@ Gem::Specification.new do |s|
     "*.gemspec",
     "test/*.*"
   ].inspect %>
+  s.add_dependency "redis", "~> 2.0.0"
+  s.add_development_dependency "cutest", "~> 0.1"
 end

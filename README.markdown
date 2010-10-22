@@ -1,32 +1,31 @@
 Nest
 ====
 
-Generate nested namespaced keys for key-value databases.
+Object Oriented Keys for Redis.
 
 Description
 -----------
 
-If you are familiar with databases like
-[Redis](http://code.google.com/p/redis) and
-libraries like [Ohm](http://ohm.keyvalue.org) or
-[redis-namespace](http://github.com/defunkt/redis-namespace), you
-already know how important it is to craft the keys that will hold the
-data.
+If you are familiar with databases like [Redis](http://code.google.com/p/redis)
+and libraries like [Ohm](http://ohm.keyvalue.org) you already know how
+important it is to craft the keys that will hold the data.
 
-    >> @redis.set "event:3:name", "Redis Meetup"
-    >> @redis.get "event:3:name"
-    => "Redis Meetup"
+    >> redis = Redis.new
+    >> redis.sadd("event:3:attendees", "Albert")
+    >> redis.smembers("event:3:attendees")
+    => ["Albert"]
 
 It is a design pattern in key-value databases to use the key to simulate
 structure, and you can read more about this in the [case study for a
 Twitter clone](http://code.google.com/p/redis/wiki/TwitterAlikeExample).
 
-Nest helps you generate those keys by providing chainable namespaces:
+Nest helps you generate those keys by providing chainable namespaces that are
+already connected to Redis:
 
     >> event = Nest.new("event")
-    >> @redis.set event[3][:name], "Redis Meetup"
-    >> @redis.get event[3][:name]
-    => "Redis Meetup"
+    >> event[3][:attendees].sadd("Albert")
+    >> event[3][:attendees].smembers
+    => ["Albert"]
 
 Usage
 -----
@@ -53,34 +52,41 @@ dealing with events:
     >> events = Nest.new("events")
     => "events"
 
-    >> redis = Redis.new
-    => #<Redis::Client...>
-
-    >> id = redis.incr(event)
+    >> id = events[:id].incr
     => 1
 
-    >> redis.set events[id][:name], "Redis Meetup"
+    >> events[id][:attendees].sadd("Albert")
     => "OK"
-
-    >> redis.get events[id][:name]
-    => "Redis Meetup"
 
     >> meetup = events[id]
     => "events:1"
 
-    >> redis.get meetup[:name]
-    => "Redis Meetup"
+    >> meetup[:attendees].smembers
+    => ["Albert"]
 
-Using Nest as an object oriented Redis key
-------------------------------------------
+Supplying your existing Redis instance
+--------------------------------------
 
-If you supply a Redis client as a second parameter, you can operate with
-Redis directly:
+You can supply a `Redis` instance as a second parameter. If you don't, a default
+instance is created for you:
 
     >> redis = Redis.new
     => #<Redis::Client...>
 
-    >> events = Nest.new("events", redis)
+    >> users = Nest.new("users", redis)
+    => "users"
+
+    >> id = users[:id].incr
+    => 1
+
+    >> users[id].hset(:name, "Albert")
+    => "OK"
+
+`Nest` objects respond to `redis` and return a `Redis` instance. It is
+automatically reused when you create a new namespace, and you can reuse it when
+creating a new instance of Nest:
+
+    >> events = Nest.new("events", meetup.redis)
     => "events"
 
     >> events.sadd(meetup)
@@ -95,8 +101,9 @@ Redis directly:
     >> events.del
     >> true
 
-It allows you to execute all the Redis commands that expect a key as the
-first parameter. Think of it as a curried Redis client.
+Nest allows you to execute all the Redis commands that expect a key as the
+first parameter. Think of it as a
+[curried](http://en.wikipedia.org/wiki/Currying) Redis client.
 
 Differences with redis-namespace
 --------------------------------
@@ -109,6 +116,10 @@ different scope.
 
 Use Nest when you want to use the keys to represent structure.
 
+Tip: instead of using redis-namespace, it is recommended that you run a
+different instance of `redis-server`. Translating keys back and forth is not
+only delicate, but unnecessary and counterproductive.
+
 Differences with Ohm
 --------------------
 
@@ -119,12 +130,15 @@ between objects.
 
 Use Ohm when you want to use Redis as your database.
 
-Use Nest when mapping objects with Ohm is not possible.
+Use Nest when mapping objects with Ohm is not possible or overkill.
+
+Tip: Ohm uses Nest internally to deal with keys. Having a good knowledge
+of Nest will let you extend Ohm to suit your needs.
 
 Installation
 ------------
 
-    $ sudo gem install nest
+    $ gem install nest
 
 License
 -------

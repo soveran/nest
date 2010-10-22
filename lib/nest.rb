@@ -1,3 +1,5 @@
+require "redis"
+
 class Nest < String
   VERSION = "0.0.7"
 
@@ -15,7 +17,9 @@ class Nest < String
   :zrem, :zremrangebyrank, :zremrangebyscore, :zrevrange, :zrevrank,
   :zscore, :zunionstore]
 
-  def initialize(key, redis = nil)
+  attr :redis
+
+  def initialize(key, redis = Redis.connect)
     super(key.to_s)
     @redis = redis
   end
@@ -28,11 +32,5 @@ class Nest < String
     define_method(meth) do |*args, &block|
       redis.send(meth, self, *args, &block)
     end
-  end
-
-private
-
-  def redis
-    @redis
   end
 end
