@@ -1,5 +1,6 @@
 task :test do
-  system "cd test && ruby nest_test.rb"
+  require "cutest"
+  Cutest.run(Dir["test/nest*"])
 end
 
 task :default => :test
