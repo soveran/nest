@@ -1,3 +1,3 @@
 require "rubygems"
-require "contest"
+require "cutest"
 require File.join(File.dirname(__FILE__), "..", "lib", "nest")
