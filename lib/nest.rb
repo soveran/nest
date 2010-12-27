@@ -19,7 +19,7 @@ class Nest < String
 
   attr :redis
 
-  def initialize(key, redis = Redis.connect)
+  def initialize(key, redis = Redis.current)
     super(key.to_s)
     @redis = redis
   end

@@ -84,3 +84,27 @@ scope do
     assert message_received
   end
 end
+
+scope do
+  prepare do
+    @redis1 = Redis.connect(:db => 15)
+    @redis2 = Redis.connect(:db => 14)
+
+    @redis1.flushdb
+    @redis2.flushdb
+  end
+
+  test "honors Redis.current" do
+    Redis.current = @redis1
+
+    foo = Nest.new("foo")
+
+    foo.set("bar")
+
+    assert_equal "bar", foo.get
+
+    Redis.current = @redis2
+
+    assert_equal nil, Nest.new("foo").get
+  end
+end
