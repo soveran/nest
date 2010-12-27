@@ -8,14 +8,30 @@ task :default => :test
 task :commands do
   require "open-uri"
   require "par"
+  require "json"
 
   file = File.expand_path("lib/nest.rb", File.dirname(__FILE__))
-  path = "http://dimaion.com/redis/master/keys"
+  path = "https://github.com/antirez/redis-doc/raw/master/commands.json"
 
-  commands = open(path).read.split("\n")
+  commands = JSON.parse(open(path).read).select do |name, command|
+    # Skip all DEBUG commands
+    next if command["group"] == "server"
+
+    # If the command has no arguments, it doesn't operate on a key
+    next if command["arguments"].nil?
+
+    arg = command["arguments"].first
+
+    arg["type"] == "key" ||
+      Array(arg["name"]) == ["channel"]
+  end
+
+  commands = commands.keys.map { |key| key.downcase.to_sym }
+
+  commands.delete(:mget)
 
   source = File.read(file).sub(/  METHODS = .+?\n\n/m) do
-    Par.new("  METHODS = #{commands.map(&:to_sym).inspect}\n\n", p: 2)
+    Par.new("  METHODS = #{commands.inspect}\n\n", p: 2)
   end
 
   File.open(file, "w") { |f| f.write source }
