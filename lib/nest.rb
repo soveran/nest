@@ -1,7 +1,7 @@
 require "redis"
 
 class Nest < String
-  VERSION = "1.0.1"
+  VERSION = "1.0.2"
 
   METHODS = [:append, :blpop, :brpop, :decr, :decrby, :del, :exists,
   :expire, :expireat, :get, :getset, :hdel, :hexists, :hget, :hgetall,
