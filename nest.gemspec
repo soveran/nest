@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.email             = ["michel@soveran.com"]
   s.homepage          = "http://github.com/soveran/nest"
 
-  s.add_dependency "redis", "~> 2.1"
+  s.add_dependency "redis"
 
   s.files = Dir[
     "LICENSE",
