@@ -3,6 +3,7 @@ Gem::Specification.new do |s|
   s.version           = "1.1.2"
   s.summary           = "Object-oriented keys for Redis."
   s.description       = "It is a design pattern in key-value databases to use the key to simulate structure, and Nest can take care of that."
+  s.licenses          = ["MIT"]
   s.authors           = ["Michel Martens"]
   s.email             = ["michel@soveran.com"]
   s.homepage          = "http://github.com/soveran/nest"
