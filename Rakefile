@@ -7,7 +7,6 @@ task :default => :test
 
 task :commands do
   require "open-uri"
-  require "par"
   require "json"
 
   file = File.expand_path("lib/nest.rb", File.dirname(__FILE__))
@@ -31,7 +30,7 @@ task :commands do
   commands.delete(:mget)
 
   source = File.read(file).sub(/  METHODS = .+?\n\n/m) do
-    Par.new("  METHODS = #{commands.inspect}\n\n", p: 2)
+    "  METHODS = #{commands.inspect}\n\n"
   end
 
   File.open(file, "w") { |f| f.write source }
