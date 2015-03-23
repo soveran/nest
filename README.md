@@ -6,18 +6,18 @@ Object Oriented Keys for Redis.
 Description
 -----------
 
-If you are familiar with databases like [Redis](http://code.google.com/p/redis)
+If you are familiar with databases like [Redis](http://redis.io)
 and libraries like [Ohm](http://ohm.keyvalue.org) you already know how
 important it is to craft the keys that will hold the data.
 
-    >> redis = Redis.new
-    >> redis.sadd("event:3:attendees", "Albert")
-    >> redis.smembers("event:3:attendees")
+    >> redis = Redic.new
+    >> redis.call("SADD", "event:3:attendees", "Albert")
+    >> redis.call("SMEMBERS", "event:3:attendees")
     => ["Albert"]
 
 It is a design pattern in key-value databases to use the key to simulate
 structure, and you can read more about this in the [case study for a
-Twitter clone](http://code.google.com/p/redis/wiki/TwitterAlikeExample).
+Twitter clone](http://redis.io/topics/twitter-clone).
 
 Nest helps you generate those keys by providing chainable namespaces that are
 already connected to Redis:
@@ -67,11 +67,11 @@ dealing with events:
 Supplying your existing Redis instance
 --------------------------------------
 
-You can supply a `Redis` instance as a second parameter. If you don't, a default
-instance is created for you:
+You can supply a [Redic](https://github.com/amakawa/redic) instance as
+a second parameter. If you don't, a default instance is created for you:
 
-    >> redis = Redis.new
-    => #<Redis::Client...>
+    >> redis = Redic.new
+    => #<Redic:0x007fa640845f10 ...>
 
     >> users = Nest.new("users", redis)
     => "users"
@@ -82,7 +82,7 @@ instance is created for you:
     >> users[id].hset(:name, "Albert")
     => "OK"
 
-`Nest` objects respond to `redis` and return a `Redis` instance. It is
+`Nest` objects respond to `redis` and return a `Redic` instance. It is
 automatically reused when you create a new namespace, and you can reuse it when
 creating a new instance of Nest:
 
@@ -102,8 +102,7 @@ creating a new instance of Nest:
     >> true
 
 Nest allows you to execute all the Redis commands that expect a key as the
-first parameter. Think of it as a
-[curried](http://en.wikipedia.org/wiki/Currying) Redis client.
+first parameter.
 
 Differences with redis-namespace
 --------------------------------
@@ -143,7 +142,7 @@ Installation
 License
 -------
 
-Copyright (c) 2010 Michel Martens & Damian Janowski
+Copyright (c) 2010-2015 Michel Martens & Damian Janowski
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
