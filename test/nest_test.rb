@@ -1,4 +1,4 @@
-require File.expand_path("test_helper", File.dirname(__FILE__))
+require_relative "helper"
 
 # Creating namespaces.
 scope do
@@ -37,8 +37,8 @@ end
 # Operating with redis.
 scope do
   prepare do
-    @redis = Redis.new
-    @redis.flushdb
+    @redis = Redic.new
+    @redis.call("FLUSHDB")
   end
 
   test "work if no redis instance was passed" do
@@ -58,53 +58,6 @@ scope do
   test "pass the redis instance to new keys" do
     n1 = Nest.new("foo", @redis)
 
-    assert @redis.id == n1["bar"].redis.id
-  end
-
-  test "PubSub" do
-    foo = Nest.new("foo", @redis)
-    listening = false
-    message_received = false
-
-    Thread.new do
-      while !listening; end
-      Nest.new("foo", Redis.new(:db => 15)).publish("")
-    end
-
-    foo.subscribe do |on|
-      on.message do
-        message_received = true
-
-        foo.unsubscribe
-      end
-
-      listening = true
-    end
-
-    assert message_received
-  end
-end
-
-scope do
-  prepare do
-    @redis1 = Redis.connect(:db => 15)
-    @redis2 = Redis.connect(:db => 14)
-
-    @redis1.flushdb
-    @redis2.flushdb
-  end
-
-  test "honors Redis.current" do
-    Redis.current = @redis1
-
-    foo = Nest.new("foo")
-
-    foo.set("bar")
-
-    assert_equal "bar", foo.get
-
-    Redis.current = @redis2
-
-    assert_equal nil, Nest.new("foo").get
+    assert @redis.object_id == n1["bar"].redis.object_id
   end
 end
