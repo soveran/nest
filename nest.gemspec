@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name              = "nest"
-  s.version           = "1.1.2"
+  s.version           = "2.0.0"
   s.summary           = "Object-oriented keys for Redis."
   s.description       = "It is a design pattern in key-value databases to use the key to simulate structure, and Nest can take care of that."
   s.licenses          = ["MIT"]
@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.email             = ["michel@soveran.com"]
   s.homepage          = "http://github.com/soveran/nest"
 
-  s.add_dependency "redis"
+  s.add_dependency "redic"
 
   s.files = Dir[
     "LICENSE",
