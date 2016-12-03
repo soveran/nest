@@ -1,40 +1,48 @@
+# Copyright (c) 2010 Michel Martens
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+#
 require "redic"
 
-class Nest < String
-  METHODS = [:append, :bitcount, :bitfield, :bitpos, :blpop, :brpop,
-    :brpoplpush, :decr, :decrby, :del, :dump, :exists, :expire,
-    :expireat, :geoadd, :geohash, :geopos, :geodist, :georadius,
-    :georadiusbymember, :get, :getbit, :getrange, :getset, :hdel,
-    :hexists, :hget, :hgetall, :hincrby, :hincrbyfloat, :hkeys, :hlen,
-    :hmget, :hmset, :hset, :hsetnx, :hstrlen, :hvals, :incr, :incrby,
-    :incrbyfloat, :lindex, :linsert, :llen, :lpop, :lpush, :lpushx,
-    :lrange, :lrem, :lset, :ltrim, :move, :persist, :pexpire, :pexpireat,
-    :pfadd, :pfcount, :pfmerge, :psetex, :pttl, :publish, :rename,
-    :renamenx, :restore, :rpop, :rpoplpush, :rpush, :rpushx, :sadd,
-    :scard, :sdiff, :sdiffstore, :set, :setbit, :setex, :setnx,
-    :setrange, :sinter, :sinterstore, :sismember, :smembers, :smove,
-    :sort, :spop, :srandmember, :srem, :strlen, :subscribe, :sunion,
-    :sunionstore, :touch, :ttl, :type, :unsubscribe, :watch, :zadd,
-    :zcard, :zcount, :zincrby, :zinterstore, :zlexcount, :zrange,
-    :zrangebylex, :zrevrangebylex, :zrangebyscore, :zrank, :zrem,
-    :zremrangebylex, :zremrangebyrank, :zremrangebyscore, :zrevrange,
-    :zrevrangebyscore, :zrevrank, :zscore, :zunionstore, :sscan,
-    :hscan, :zscan]
-
-  attr :redis
-
-  def initialize(key, redis = Redic.new)
-    super(key.to_s)
-    @redis = redis
+class Nest
+  def initialize(ns, rc = Redic.new)
+    @ns = ns.to_s
+    @rc = rc
   end
 
   def [](key)
-    self.class.new("#{self}:#{key}", redis)
+    Nest.new("#{@ns}:#{key}", @rc)
   end
 
-  METHODS.each do |meth|
-    define_method(meth) do |*args|
-      redis.call(meth, self, *args)
-    end
+  def redis
+    @rc
+  end
+
+  def to_s
+    @ns
+  end
+
+  def call(command, *args)
+    @rc.call(command, to_s, *args)
+  end
+
+  def inspect
+    @ns.inspect
   end
 end

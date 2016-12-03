@@ -12,9 +12,9 @@ important it is to craft the keys that will hold the data.
 
 ```ruby
 >> redis = Redic.new
->> redis.call("SADD", "event:3:attendees", "Albert")
->> redis.call("SMEMBERS", "event:3:attendees")
-=> ["Albert"]
+>> redis.call("HSET", "Event:3", "name", "Redis Meetup")
+>> redis.call("HGET", "Event:3", "name")
+=> ["Redis Meetup"]
 ```
 
 It is a design pattern in key-value databases to use the key to simulate
@@ -25,10 +25,10 @@ Nest helps you generate those keys by providing chainable namespaces that are
 already connected to Redis:
 
 ```ruby
->> event = Nest.new("event")
->> event[3][:attendees].sadd("Albert")
->> event[3][:attendees].smembers
-=> ["Albert"]
+>> event = Nest.new("Event")
+>> event[3].call("HSET", "name", "Redis Meetup")
+>> event[3].call("HGET", "name")
+=> ["Redis Meetup"]
 ```
 
 Usage
@@ -58,20 +58,20 @@ In a more realistic tone, lets assume you are working with Redis and
 dealing with events:
 
 ```ruby
->> events = Nest.new("events")
-=> "events"
+>> event = Nest.new("Event")
+=> "Event"
 
->> id = events[:id].incr
+>> id = event[:id].call("INCR")
 => 1
 
->> events[id][:attendees].sadd("Albert")
-=> "OK"
+>> event[id].call("HSET", "name", "Redis Meetup")
+=> 1
 
->> meetup = events[id]
-=> "events:1"
+>> meetup = event[id]
+=> "Event:1"
 
->> meetup[:attendees].smembers
-=> ["Albert"]
+>> meetup.call("HGET", "name")
+=> ["Redis Meetup"]
 ```
 
 Supplying your existing Redis instance
@@ -84,14 +84,11 @@ a second parameter. If you don't, a default instance is created for you:
 >> redis = Redic.new("redis://localhost:6379")
 => #<Redic:0x007fa640845f10 ...>
 
->> users = Nest.new("users", redis)
-=> "users"
+>> event = Nest.new("Event", redis)
+=> "Event"
 
->> id = users[:id].incr
-=> 1
-
->> users[id].hset(:name, "Albert")
-=> "OK"
+>> event[:id].call("TYPE")
+=> "string"
 ```
 
 `Nest` objects respond to `redis` and return a `Redic` instance. It is
@@ -99,24 +96,12 @@ automatically reused when you create a new namespace, and you can reuse it when
 creating a new instance of Nest:
 
 ```ruby
->> events = Nest.new("events", meetup.redis)
-=> "events"
-
->> events.sadd(meetup)
-=> true
-
->> events.sismember(meetup)
-=> true
-
->> events.smembers
-=> ["events:1"]
-
->> events.del
->> true
+>> event = Nest.new("Event", meetup.redis)
+=> "Event"
 ```
 
 Nest allows you to execute all the Redis commands that expect a key as the
-first parameter.
+first parameter. If you use any other command, the result can be unexpected.
 
 Differences with redis-namespace
 --------------------------------
