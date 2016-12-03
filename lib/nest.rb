@@ -33,6 +33,10 @@ class Nest
   def redis
     @rc
   end
+  
+  def hash
+    @ns.hash
+  end
 
   def to_s
     @ns
