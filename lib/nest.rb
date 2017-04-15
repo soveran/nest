@@ -49,4 +49,8 @@ class Nest
   def inspect
     @ns.inspect
   end
+
+  def method_missing(m, *args)
+    call(m, *args)
+  end
 end

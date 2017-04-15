@@ -31,6 +31,17 @@ already connected to Redis:
 => ["Redis Meetup"]
 ```
 
+Alternatively, you can send the Redis commands as messages to Nest,
+and if the method definition is missing it will forward the command
+to Redis:
+
+```ruby
+>> event = Nest.new("Event")
+>> event[3].hset("name", "Redis Meetup")
+>> event[3].hget("name")
+=> ["Redis Meetup"]
+```
+
 Usage
 -----
 
@@ -61,16 +72,16 @@ dealing with events:
 >> event = Nest.new("Event")
 => "Event"
 
->> id = event[:id].call("INCR")
+>> id = event[:id].incr
 => 1
 
->> event[id].call("HSET", "name", "Redis Meetup")
+>> event[id].hset("name", "Redis Meetup")
 => 1
 
 >> meetup = event[id]
 => "Event:1"
 
->> meetup.call("HGET", "name")
+>> meetup.hget("name")
 => ["Redis Meetup"]
 ```
 

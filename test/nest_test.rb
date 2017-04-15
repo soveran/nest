@@ -34,7 +34,7 @@ scope do
   end
 end
 
-# Operating with redis.
+# Operating with Redis.
 scope do
   prepare do
     @redis = Redic.new
@@ -59,5 +59,21 @@ scope do
     n1 = Nest.new("foo", @redis)
 
     assert @redis.object_id == n1["bar"].redis.object_id
+  end
+end
+
+
+# Operating with Redis with dynamic methods.
+scope do
+  prepare do
+    @redis = Redic.new
+    @redis.call("FLUSHDB")
+  end
+
+  test "relay missing methods as Redis commands" do
+    n1 = Nest.new("foo")
+    n1.set("s1")
+
+    assert "s1" == n1.get
   end
 end
