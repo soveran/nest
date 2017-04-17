@@ -77,3 +77,13 @@ scope do
     assert "s1" == n1.get
   end
 end
+
+# Operations that call to_a and to_ary
+scope do
+  test "interaction with array-casting operations" do
+    n1 = Nest.new("foo")
+
+    assert_equal [n1], [n1].flatten
+    assert_equal [n1],  Array(n1)
+  end
+end

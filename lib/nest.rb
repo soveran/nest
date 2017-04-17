@@ -42,6 +42,14 @@ class Nest
     @ns
   end
 
+  def to_ary
+    nil
+  end
+
+  def to_a
+    nil
+  end
+
   def call(command, *args)
     @rc.call(command, to_s, *args)
   end
