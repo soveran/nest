@@ -38,17 +38,16 @@ class Nest
     @ns.hash
   end
 
-  def to_s
-    @ns
-  end
-
   def to_ary
     nil
   end
 
-  def to_a
-    nil
+  def to_str
+    @ns
   end
+
+  alias to_s to_str
+  alias to_a to_ary
 
   def call(command, *args)
     @rc.call(command, to_s, *args)

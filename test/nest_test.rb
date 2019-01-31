@@ -87,3 +87,22 @@ scope do
     assert_equal [n1],  Array(n1)
   end
 end
+
+# Operations that call to_str and to_ary
+scope do
+  test "interaction with string-casting operations" do
+    n1 = Nest.new("foo")
+    s1 = "bar"
+
+    s2 = s1 + n1
+
+    assert_equal "barfoo", s1 + n1
+  end
+
+  test "interaction with array-casting operations" do
+    n1 = Nest.new("foo")
+
+    assert_equal [n1], [n1].flatten
+    assert_equal [n1],  Array(n1)
+  end
+end
