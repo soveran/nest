@@ -49,6 +49,10 @@ class Nest
   alias to_s to_str
   alias to_a to_ary
 
+  def to_json(*args)
+    @ns.to_json(*args)
+  end
+
   def call(command, *args)
     @rc.call(command, to_s, *args)
   end
