@@ -60,6 +60,28 @@ scope do
 
     assert @redis.object_id == n1["bar"].redis.object_id
   end
+
+  test "execute multiple redis commands in transaction" do
+    n1 = Nest.new("foo", @redis)
+
+    n1.queue("APPEND", "foo")
+    n1.queue("APPEND", "bar")
+    n1.commit
+
+    assert_equal "foobar", n1.get
+  end
+
+  test "raise error on redis failure when calling with bang" do
+    n1 = Nest.new("foo", @redis)
+    v1 = "234293482390480948029348230948"
+
+    n1.call("SET", v1)
+
+    assert_equal v1, n1.call!("GET")
+    assert_raise RuntimeError do
+      n1.call!("DECR")
+    end
+  end
 end
 
 
