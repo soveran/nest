@@ -33,7 +33,7 @@ class Nest
   def redis
     @rc
   end
-  
+
   def hash
     @ns.hash
   end
@@ -55,6 +55,18 @@ class Nest
 
   def call(command, *args)
     @rc.call(command, to_s, *args)
+  end
+
+  def call!(command, *args)
+    @rc.call!(command, to_s, *args)
+  end
+
+  def queue(command, *args)
+    @rc.queue(command, to_s, *args)
+  end
+
+  def commit
+    @rc.commit
   end
 
   def inspect
