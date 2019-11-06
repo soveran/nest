@@ -64,8 +64,10 @@ scope do
   test "execute multiple redis commands in transaction" do
     n1 = Nest.new("foo", @redis)
 
+    n1.redis.queue("MULTI")
     n1.queue("APPEND", "foo")
     n1.queue("APPEND", "bar")
+    n1.redis.queue("EXEC")
     n1.commit
 
     assert_equal "foobar", n1.get
