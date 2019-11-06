@@ -85,6 +85,44 @@ dealing with events:
 => ["Redis Meetup"]
 ```
 
+API
+---
+
+`call`: Receives a Redis command and its arguments, and returns the
+reply from the Redis server. If the reply from Redis is an error,
+an instance of `RuntimeError` is returned.
+
+`call!`: Similar to `call`, but instead of returning
+an instance of `RuntimeError` when the command fails, the error is
+raised.
+
+`queue`: Receives the same kind of arguments as `call`, but enqueues
+the command in a transaction.
+
+`commit`: Commits the transaction and returns the reply from Redis.
+
+Any call to a missing method will result in `Nest` converting the
+method name to a Redis command and applying the arguments in an
+invocation to `call`.
+
+For example:
+
+```ruby
+ns = Nest.new("foo")
+ns.append("hello,")
+ns.append(" world")
+ns.get
+```
+
+Is equivalent to:
+
+```ruby
+ns = Nest.new("foo")
+ns.call("APPEND", "hello,")
+ns.call("APPEND", " world")
+ns.call("GET")
+```
+
 Supplying your existing Redis instance
 --------------------------------------
 
