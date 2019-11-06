@@ -1,3 +1,7 @@
+## 3.2.0
+
+- Add call!, queue and commit commands.
+
 ## 3.1.2
 
 - Define to_json
